@@ -1,0 +1,5 @@
+- hosts: dev
+  remote_user: vagrant
+  serial: 1
+  roles:
+    - docker

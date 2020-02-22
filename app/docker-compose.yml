@@ -1,0 +1,25 @@
+version: "3.2"
+services:
+  php1:
+    build: 
+      context: './php1/'
+      args:
+       PHP_VERSION: 7.3
+    ports:
+      - "9001:9000"
+  php2:
+    build: 
+      context: './php2/'
+      args:
+       PHP_VERSION: 7.3
+    ports:
+      - "9002:9000"       
+  apache:
+    build:
+      context: './apache/'
+      args:
+       APACHE_VERSION: 2.4.32
+    ports:
+      - "8081:8081"
+      - "8082:8082"
+
