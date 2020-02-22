@@ -1,0 +1,33 @@
+- name: Download consul zip
+  get_url:
+    url: "{{ consul_download_url }}"
+    dest: "{{ consul_tmp_zip }}"
+
+- name: Extract consul zip
+  unarchive:
+    remote_src: yes
+    src: "{{ consul_tmp_zip }}"
+    dest: /usr/local/bin
+    
+- name: Directories are created
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: "{{ directories }}"
+  tags: [consul]
+
+- name: Is running
+  shell: "nohup consul agent {{ consul_extra }} \
+    -data-dir /data/consul/data \
+    -config-dir /data/consul/config \
+    -node={{ ansible_hostname }} \
+    -bind={{ ip }} \
+    -client=0.0.0.0 \
+    -dev
+    >{{ logs_dir }}/consul.log 2>&1 &"
+  tags: [consul]
+
+- name: Has joined
+  shell: consul join {{ consul_server_ip }}
+  when: consul_server_ip is defined
+  tags: [consul]

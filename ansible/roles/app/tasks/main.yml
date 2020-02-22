@@ -1,0 +1,11 @@
+- name: Containers are built
+  shell: docker-compose build
+  args:
+    chdir: /vagrant/app
+  tags: [app]
+  
+- name: Containers are running
+  shell: docker-compose up
+  args:
+    chdir: /vagrant/app
+  tags: [app]
