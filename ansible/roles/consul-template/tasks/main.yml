@@ -1,0 +1,29 @@
+- name: Download consul template zip
+  get_url:
+    url: "{{ consul_template_download_url }}"
+    dest: "{{ consul_template_tmp_zip }}"
+  tags: [consul-template]
+
+- name: Extract consul template zip
+  unarchive:
+    remote_src: yes
+    src: "{{ consul_template_tmp_zip }}"
+    dest: /usr/local/bin
+  tags: [consul-template]
+    
+- name: Directory is created
+  file:
+    path: /data/consul-template
+    state: directory
+  tags: [consul-template]
+  
+- name: Example template is copied
+  copy:
+    src: "{{ item }}"
+    dest: "/data/consul-template/{{ item }}"
+    mode: 0644
+  with_items:
+    - apache_php_api.ctmpl
+  tags: [consul-template]
+
+

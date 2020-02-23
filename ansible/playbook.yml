@@ -5,7 +5,9 @@
     - common
     #- docker
     #- docker-compose
+    - apache
     - consul
-    - registrator
+    - consul-template
+    - registrator    
     - app
     

@@ -12,4 +12,5 @@ Vagrant.configure("2") do |config|
   end
   # Setup synced folder
   config.vm.synced_folder "./app", "/vagrant/app", create: true
+  config.vm.network :forwarded_port, guest: 8081, host: 8081
 end

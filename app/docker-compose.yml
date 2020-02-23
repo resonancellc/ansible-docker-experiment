@@ -6,26 +6,22 @@ services:
       args:
        PHP_VERSION: 7.3
     ports:
-      - "9001:9000"
+      - "9000"
     environment:
       - SERVICE_NAME=php1
       - SERVICE_ID=php1
+      - SERVICE_TAGS=php_api
+      - SERVICE_RULE=/php1
   php2:
     build: 
       context: './php2/'
       args:
        PHP_VERSION: 7.3
     ports:
-      - "9002:9000"
+      - "9000"
     environment:
       - SERVICE_NAME=php2
-      - SERVICE_ID=php2    
-  apache:
-    build:
-      context: './apache/'
-      args:
-       APACHE_VERSION: 2.4.32
-    ports:
-      - "8081:8081"
-      - "8082:8082"
+      - SERVICE_ID=php2
+      - SERVICE_TAGS=php_api
+      - SERVICE_RULE=/php2
 

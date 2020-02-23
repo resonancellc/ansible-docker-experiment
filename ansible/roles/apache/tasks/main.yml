@@ -1,0 +1,22 @@
+- name: install apache2
+  apt: name=apache2 update_cache=yes state=latest
+
+- name: enabled mod_rewrite
+  apache2_module: name=rewrite state=present
+  notify:
+    - restart apache2
+    
+- name: enabled mod_deflate
+  apache2_module: name=deflate state=present
+  notify:
+    - restart apache2  
+    
+- name: enabled mod_proxy
+  apache2_module: name=proxy state=present
+  notify:
+    - restart apache2    
+    
+- name: enabled mod_proxy_fcgi
+  apache2_module: name=proxy_fcgi state=present
+  notify:
+    - restart apache2    
