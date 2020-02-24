@@ -1,0 +1,22 @@
+- name: Build php2 image
+  docker_image:
+    name: php2
+    build:
+      path: /vagrant/app/php2
+      args:
+        PHP_VERSION: 7.3
+    source: build
+    
+- name: php2 start
+  docker_container:
+    name: php2
+    image: php2
+    ports:
+     - "80"
+    env:
+      SERVICE_NAME=php2
+      SERVICE_ID=php2
+      SERVICE_TAGS=php_api
+      SERVICE_RULE=/php2
+    state: started
+  tags: [php2]

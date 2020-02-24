@@ -21,9 +21,8 @@
     -data-dir /data/consul/data \
     -config-dir /data/consul/config \
     -node={{ ansible_hostname }} \
-    -bind={{ ip }} \
+    -bind={{ inventory_hostname }} \
     -client=0.0.0.0 \
-    -dev
     >{{ logs_dir }}/consul.log 2>&1 &"
   tags: [consul]
 

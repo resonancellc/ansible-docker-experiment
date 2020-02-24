@@ -1,13 +1,11 @@
-- hosts: dev
+- hosts: all
   remote_user: vagrant
   serial: 1
   roles:
     - common
     - docker
-    - docker-compose
-    - apache
     - consul
-    - consul-template
     - registrator    
-    - app
+    - php1
+    - php2
     

@@ -1,0 +1,14 @@
+{{range services}}{{range service .Name}}{{if in .Tags "php_api"}}
+location {{.ServiceMeta.rule}} {
+    proxy_pass http://{{.Name}}{{.ServiceMeta.rule}};
+    proxy_next_upstream error timeout invalid_header http_500;
+}
+{{end}}{{end}}{{end}}
+
+{{range services}}
+upstream {{.Name}} {
+    {{range service .Name}}{{if in .Tags "php_api"}}
+    server {{.Node}}:{{.Port}};
+    {{end}}{{end}}
+}
+{{end}}
