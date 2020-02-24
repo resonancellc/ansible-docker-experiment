@@ -3,8 +3,8 @@
   serial: 1
   roles:
     - common
-    #- docker
-    #- docker-compose
+    - docker
+    - docker-compose
     - apache
     - consul
     - consul-template
