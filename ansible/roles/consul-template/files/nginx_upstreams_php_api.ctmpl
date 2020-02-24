@@ -1,0 +1,7 @@
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
+upstream {{.Name}} {
+            {{range service .Name}}
+    server {{.Node}}:{{.Port}};
+            {{end}}
+}
+{{end}}{{end}}{{end}}{{end}}

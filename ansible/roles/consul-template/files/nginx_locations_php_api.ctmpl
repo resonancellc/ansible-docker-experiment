@@ -1,0 +1,6 @@
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
+location {{.ServiceMeta.rule}} {
+    proxy_pass http://{{.Name}}{{.ServiceMeta.rule}};
+    proxy_next_upstream error timeout invalid_header http_500;
+}
+{{end}}{{end}}{{end}}{{end}}
