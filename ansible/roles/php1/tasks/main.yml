@@ -18,5 +18,6 @@
       SERVICE_ID=php1
       SERVICE_TAGS=php_api
       SERVICE_RULE=/php1
+      SERVICE_HOST={{ inventory_hostname }}
     state: started
   tags: [php1]

@@ -1,4 +1,4 @@
 ARG PHP_VERSION=""
 FROM php:${PHP_VERSION:+${PHP_VERSION}-}apache
 
-COPY ./public/ /var/www/html/
+COPY ./ /var/www/html/
