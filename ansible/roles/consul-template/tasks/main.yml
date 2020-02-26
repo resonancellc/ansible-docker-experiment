@@ -17,7 +17,7 @@
     state: directory
   tags: [consul-template]
   
-- name: Example template is copied
+- name: Templates are copied
   copy:
     src: "{{ item }}"
     dest: "/data/consul-template/{{ item }}"
@@ -26,6 +26,7 @@
     - apache_php_api.ctmpl
     - nginx_locations_php_api.ctmpl
     - nginx_upstreams_php_api.ctmpl
+    - regenerate-nginx-config.sh
   tags: [consul-template]
 
 
