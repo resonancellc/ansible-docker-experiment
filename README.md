@@ -14,13 +14,15 @@ lb(nginx/docker)
 `registrator` and `consul` runs on all nodes. registrator "watches" docker system and registers services info in `consul` db.
 `consul-template` on `lb` node, generates proxy rules based on `consul` data and templates.
 
+## provision nodes
+
 ```bash
 vagrant up
 ansible-playbook ansible/app.yml -i ansible/hosts/app
 ansible-playbook ansible/lb.yml -i ansible/hosts/lb
 ```
 
-#test service registry
+## test service registry
 
 ```
 vagrant ssh lb
@@ -30,7 +32,7 @@ curl 127.0.0.1:8500/v1/catalog/service/php1
 curl 127.0.0.1:8500/v1/catalog/service/php2
 ```
 
-#test template generation
+## nginx template generation
 
 `vagrant ssh lb`
 
@@ -50,3 +52,53 @@ or
 bash /data/consul-template/regenerate-nginx-config.sh
 sudo docker kill -s HUP nginx
 ```
+
+## haproxy template generation
+
+provision `haproxy` on `lb` node
+
+```bash
+ansible-playbook ansible/lb.yml -i ansible/hosts/lb
+```
+
+`vagrant ssh lb`
+
+```bash
+#stop nginx container if running
+sudo docker ps
+sudo docker stop nginx
+
+#generate config for running services
+bash /data/consul-template/regenerate-haproxy-config.sh
+
+#initial start
+docker restart haproxy
+
+#while running
+docker kill -s HUP haproxy
+```
+## test calls
+
+### from host machine:
+
+```bash
+curl http://127.0.0.1:8081/php1
+curl http://127.0.0.1:8081/php2
+```
+
+###  from lb
+
+```bash
+curl http://127.0.0.1/php1
+curl http://127.0.0.1/php2
+```
+
+### from app
+
+to get ports run `curl 127.0.0.1:8500/v1/catalog/service/php1` and `curl 127.0.0.1:8500/v1/catalog/service/php2`
+
+```bash
+curl http://127.0.0.1:{port1}/php1
+curl http://127.0.0.1:{port2}/php2
+```
+

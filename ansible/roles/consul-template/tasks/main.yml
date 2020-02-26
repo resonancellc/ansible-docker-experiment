@@ -27,6 +27,8 @@
     - nginx_locations_php_api.ctmpl
     - nginx_upstreams_php_api.ctmpl
     - regenerate-nginx-config.sh
+    - haproxy_php_api.ctmpl
+    - regenerate-haproxy-config.sh
   tags: [consul-template]
 
 

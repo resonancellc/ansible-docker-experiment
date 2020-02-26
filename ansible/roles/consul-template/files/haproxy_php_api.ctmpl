@@ -1,0 +1,13 @@
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
+frontend {{.Name}}-fe
+    bind *:80
+    option http-server-close
+    acl url_{{.Name}} path_beg {{.ServiceMeta.rule}}
+    use_backend {{.Name}}-be if url_{{.Name}}
+{{end}}{{end}}{{end}}{{end}}
+
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
+backend {{.Name}}-be
+    {{range service .Name}}
+    server {{.Node}}_{{.Port}} {{.ServiceMeta.host}}:{{.Port}} check{{end}}
+{{end}}{{end}}{{end}}{{end}}

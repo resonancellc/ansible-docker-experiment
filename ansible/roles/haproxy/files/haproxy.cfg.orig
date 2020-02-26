@@ -1,7 +1,4 @@
 global
-    chroot /var/lib/haproxy
-    user haproxy
-    group haproxy
     pidfile /var/run/haproxy.pid
 
 defaults
@@ -20,9 +17,3 @@ defaults
     timeout queue   30s
     timeout http-request 5s
     timeout http-keep-alive 15s
-
-    stats enable
-    stats refresh 30s
-    stats realm Strictly\ Private
-    stats auth admin:admin
-    stats uri /admin?stats

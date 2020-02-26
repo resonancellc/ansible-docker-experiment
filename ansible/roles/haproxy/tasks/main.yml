@@ -16,11 +16,9 @@
 
 - name: Container is running
   docker_container:
-    image: million12/haproxy
+    image: haproxy
     name: haproxy
     state: started
     ports: "{{ ports }}"
-    volumes: /data/haproxy/config/:/etc/haproxy/
-    capabilities:
-      - NET_ADMIN
+    volumes: /data/haproxy/config/:/usr/local/etc/haproxy/
   tags: [haproxy]
