@@ -19,7 +19,11 @@ lb(nginx/docker)
 ```bash
 vagrant up
 ansible-playbook ansible/app.yml -i ansible/hosts/app
-ansible-playbook ansible/lb.yml -i ansible/hosts/lb
+#haproxy version
+ansible-playbook ansible/lb-haproxy.yml -i ansible/hosts/lb
+
+#or nginx version
+ansible-playbook ansible/lb-nginx.yml -i ansible/hosts/lb
 ```
 
 ## test service registry
@@ -32,7 +36,10 @@ curl 127.0.0.1:8500/v1/catalog/service/php1
 curl 127.0.0.1:8500/v1/catalog/service/php2
 ```
 
-## nginx template generation
+## manual nginx template generation
+
+`consul-template` roles runs bg process which watches `consul` and automatically updates config and reload proxy container.
+So there's no need to generate files manually, but this just describes the process.
 
 `vagrant ssh lb`
 
@@ -55,11 +62,8 @@ sudo docker kill -s HUP nginx
 
 ## haproxy template generation
 
-provision `haproxy` on `lb` node
-
-```bash
-ansible-playbook ansible/lb-haproxy.yml -i ansible/hosts/lb
-```
+`consul-template` roles runs bg process which watches `consul` and automatically updates config and reload proxy container.
+So there's no need to generate files manually, but this just describes the process.
 
 `vagrant ssh lb`
 

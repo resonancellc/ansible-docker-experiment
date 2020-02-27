@@ -1,20 +1,32 @@
+- name: Consul template exists
+  stat:
+    path: /usr/local/bin/consul-template
+  register: consul_template_exist
+  tags: [consul-template]
+  
 - name: Download consul template zip
   get_url:
     url: "{{ consul_template_download_url }}"
     dest: "{{ consul_template_tmp_zip }}"
-  tags: [consul-template]
+  when: not consul_template_exist.stat.exists
+  tags: [consul-template]  
 
 - name: Extract consul template zip
   unarchive:
     remote_src: yes
     src: "{{ consul_template_tmp_zip }}"
     dest: /usr/local/bin
+  when: not consul_template_exist.stat.exists
   tags: [consul-template]
     
 - name: Directory is created
   file:
-    path: /data/consul-template
+    path: 
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - /data/consul-template
+    - /var/log/consul-template
   tags: [consul-template]
   
 - name: Templates are copied
@@ -29,6 +41,17 @@
     - regenerate-nginx-config.sh
     - haproxy_php_api.ctmpl
     - regenerate-haproxy-config.sh
+    - update-haproxy.sh
+    - update-nginx.sh
   tags: [consul-template]
+  
+- name: HAProxy template
+  shell: nohup consul-template -template "/data/consul-template/haproxy_php_api.ctmpl:/tmp/haproxy_php_api.conf:bash /data/consul-template/update-haproxy.sh" > /var/log/consul-template/consul-template.log 2>&1 &
+  when: haproxy_lb is defined
+  tags: [consul]  
 
+- name: NGinx template
+  shell: nohup consul-template -template "/data/consul-template/nginx_upstreams_php_api.ctmpl:/tmp/upstreams_php_api.conf:bash /data/consul-template/update-nginx.sh" -template "/data/consul-template/nginx_locations_php_api.ctmpl:/tmp/locations_php_api.conf:bash /data/consul-template/update-nginx.sh"  > /var/log/consul-template/consul-template.log 2>&1 &
+  when: nginx_lb is defined
+  tags: [consul]  
 
