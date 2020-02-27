@@ -1,8 +1,0 @@
-consul_download_url: https://releases.hashicorp.com/consul/1.7.0/consul_1.7.0_linux_amd64.zip
-consul_tmp_zip: /tmp/consul.zip
-logs_dir: /data/consul/logs
-
-directories:
-  - /data/consul/data
-  - /data/consul/config
-  - "{{ logs_dir }}"

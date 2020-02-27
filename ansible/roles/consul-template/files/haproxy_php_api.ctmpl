@@ -8,6 +8,7 @@ frontend {{.Name}}-fe
 
 {{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
 backend {{.Name}}-be
-    {{range service .Name}}
+    http-request replace-uri {{.ServiceMeta.rule}}(.*) {{.ServiceMeta.dest}}\1
+    {{range service .Name}}    
     server {{.Node}}_{{.Port}} {{.ServiceMeta.host}}:{{.Port}} check{{end}}
 {{end}}{{end}}{{end}}{{end}}

@@ -58,7 +58,7 @@ sudo docker kill -s HUP nginx
 provision `haproxy` on `lb` node
 
 ```bash
-ansible-playbook ansible/lb.yml -i ansible/hosts/lb
+ansible-playbook ansible/lb-haproxy.yml -i ansible/hosts/lb
 ```
 
 `vagrant ssh lb`
@@ -72,10 +72,10 @@ sudo docker stop nginx
 bash /data/consul-template/regenerate-haproxy-config.sh
 
 #initial start
-docker restart haproxy
+sudo docker restart haproxy
 
 #while running
-docker kill -s HUP haproxy
+sudo docker kill -s HUP haproxy
 ```
 ## test calls
 
