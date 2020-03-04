@@ -1,0 +1,31 @@
+- name: Content directory is created
+  file:
+    path: 
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /data/content
+  tags: [content]
+  
+- name: Download content theme zip
+  get_url:
+    url: "{{ content_theme_download_url }}"
+    dest: "/tmp"
+  tags: [content]  
+
+- name: Extract content theme zip
+  unarchive:
+    remote_src: yes
+    src: "/tmp/themes.zip"
+    dest: /data/content
+  tags: [content]
+  
+- name: Content container is running
+  docker_container:
+    image: nginx
+    name: content
+    state: started
+    ports:
+     - "80"
+    volumes: "/data/content:/usr/share/nginx/html"
+  tags: [content]
