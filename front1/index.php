@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Front-end 1</title>
+<link rel="stylesheet" href="http://content.horisen.test:8081/themes/style.css">
 </head>
 <body>
     <table>

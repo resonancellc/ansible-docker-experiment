@@ -5,5 +5,7 @@
     - common
     - docker
     - consul
+    - registrator
     - consul-template
     - nginx
+    - content

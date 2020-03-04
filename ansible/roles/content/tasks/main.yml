@@ -28,4 +28,8 @@
     ports:
      - "80"
     volumes: "/data/content:/usr/share/nginx/html"
+    env:
+      SERVICE_NAME=content
+      SERVICE_ID=content
+      SERVICE_HOST={{ inventory_hostname }}    
   tags: [content]

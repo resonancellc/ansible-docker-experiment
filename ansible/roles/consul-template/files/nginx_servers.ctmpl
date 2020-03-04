@@ -3,7 +3,7 @@ server {
   listen 80;
   server_name api.horisen.test;
 
-  access_log /var/log/nginx/access.log upstreamlog;
+  access_log /var/log/nginx/api-access.log upstreamlog;
 
 # api endpoints
 {{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
@@ -16,6 +16,30 @@ server {
     }
 {{end}}{{end}}{{end}}{{end}}
 
+}
+
+# content server
+server {
+  listen 80;
+  server_name content.horisen.test;
+
+  access_log /var/log/nginx/content-access.log upstreamlog;
+
+# content endpoints
+    location / {
+        proxy_set_header X-Forwarded-Host $host:$server_port;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://content;
+        proxy_next_upstream error timeout invalid_header http_500;
+    }
+}
+
+# content upstream
+upstream content {
+            {{range service "content"}}
+    server {{.ServiceMeta.host}}:{{.Port}};
+            {{end}}
 }
 
 # api upstreams
