@@ -1,0 +1,49 @@
+# api server
+server {
+  listen 80;
+  server_name api.horisen.test;
+
+  access_log /var/log/nginx/access.log upstreamlog;
+
+# api endpoints
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
+    location {{.ServiceMeta.rule}} {
+        proxy_pass http://api-{{.Name}}{{.ServiceMeta.dest}};
+        proxy_next_upstream error timeout invalid_header http_500;
+    }
+{{end}}{{end}}{{end}}{{end}}
+
+}
+
+# api upstreams
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "php_api"}}{{if eq $i 0}}
+upstream api-{{.Name}} {
+            {{range service .Name}}
+    server {{.ServiceMeta.host}}:{{.Port}};
+            {{end}}
+}
+{{end}}{{end}}{{end}}{{end}}
+
+# front-end servers
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "front"}}{{if eq $i 0}}
+server {
+  listen 80;
+  server_name {{.ServiceMeta.domain}};
+
+  access_log /var/log/nginx/{{.Name}}-access.log upstreamlog;
+  location / {
+    proxy_pass http://front-{{.Name}}/;
+    proxy_next_upstream error timeout invalid_header http_500;
+  }
+}
+{{end}}{{end}}{{end}}{{end}}
+
+# front-end upstreams
+{{range services}}{{range $i, $s := service .Name}}{{if in .Tags "front"}}{{if eq $i 0}}
+upstream front-{{.Name}} {
+            {{range service .Name}}
+    server {{.ServiceMeta.host}}:{{.Port}};
+            {{end}}
+}
+{{end}}{{end}}{{end}}{{end}}
+

@@ -83,6 +83,19 @@ sudo docker kill -s HUP haproxy
 ```
 ## test calls
 
+### from front-end:
+
+For now this works only with nGinx!
+
+in the host machine add to `/etc/hosts` the line:
+
+```
+127.0.0.1  api.horisen.test front1.horisen.test
+```
+
+Now open in browser `http://front1.horisen.test:8081/` where you should see debug info with server used and headers.
+Click on the button and watch the console, you should see api response json.
+
 ### from host machine:
 
 ```bash

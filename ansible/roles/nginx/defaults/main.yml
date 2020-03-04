@@ -9,6 +9,7 @@ directories:
   - /data/nginx/logs
   - /data/nginx/upstreams
   - /data/nginx/templates
+  - /data/nginx/servers
 
 files: [
   {src: 'services.conf', dest: '/data/nginx/conf.d/services.conf'}
@@ -18,3 +19,4 @@ volumes:
   - /data/nginx/conf.d:/etc/nginx/conf.d
   - /data/nginx/includes:/etc/nginx/includes
   - /data/nginx/upstreams:/etc/nginx/upstreams
+  - /data/nginx/servers:/etc/nginx/servers

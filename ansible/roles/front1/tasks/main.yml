@@ -1,0 +1,43 @@
+- name: Directories are created
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /data/apache/sites-enabled
+  tags: [front]
+  
+- name: Apache vhost copies
+  copy:
+    src: "{{ item }}"
+    dest: "/data/apache/sites-enabled/{{ item }}"
+    mode: 0644
+  with_items:
+    - 000-default.conf
+  tags: [front]
+  
+- name: Build front1 image
+  docker_image:
+    name: front1
+    build:
+      path: /vagrant/front1
+      args:
+        PHP_VERSION: 7.3
+    source: build
+    
+- name: front1 start
+  docker_container:
+    name: front1
+    image: front1
+    ports:
+     - "80"
+    volumes: "{{ apache_volumes }}"
+    env:
+      SERVICE_NAME=front1
+      SERVICE_ID=front1
+      SERVICE_TAGS=front
+      SERVICE_DOMAIN="front1{{ platform_domain_base }}"
+      SERVICE_API_URL="http://api{{ platform_domain_base }}{{platform_port}}/php1"
+      SERVICE_HOST={{ inventory_hostname }}
+    state: started
+  tags: [front]
+

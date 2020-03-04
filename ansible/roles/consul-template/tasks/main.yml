@@ -38,6 +38,7 @@
     - apache_php_api.ctmpl
     - nginx_locations_php_api.ctmpl
     - nginx_upstreams_php_api.ctmpl
+    - nginx_servers.ctmpl
     - regenerate-nginx-config.sh
     - haproxy_php_api.ctmpl
     - regenerate-haproxy-config.sh
@@ -51,7 +52,7 @@
   tags: [consul]  
 
 - name: NGinx template
-  shell: nohup consul-template -template "/data/consul-template/nginx_upstreams_php_api.ctmpl:/tmp/upstreams_php_api.conf:bash /data/consul-template/update-nginx.sh" -template "/data/consul-template/nginx_locations_php_api.ctmpl:/tmp/locations_php_api.conf:bash /data/consul-template/update-nginx.sh"  > /var/log/consul-template/consul-template.log 2>&1 &
+  shell: nohup consul-template -template "/data/consul-template/nginx_servers.ctmpl:/tmp/servers.conf:bash /data/consul-template/update-nginx.sh" > /var/log/consul-template/consul-template.log 2>&1 &
   when: nginx_lb is defined
   tags: [consul]  
 
